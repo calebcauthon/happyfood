@@ -1,5 +1,7 @@
 require 'sinatra'
 
+set :public_folder, 'public'
+
 get '/' do
-  "Hello World!"
+  erb :index
 end
