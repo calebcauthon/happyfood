@@ -1,3 +1,4 @@
+#how-it-works { padding-top: 5em; }
 #how-it-works i { font-size: 9rem; }
 #how-it-works i.icon-pan { font-size: 11rem; }
 #how-it-works h4 { text-transform: uppercase; font-weight: bold; }
@@ -5,7 +6,7 @@
 #how-it-works .pan img { width: 2em; margin-top: .5em; vertical-align: top; }
 
 #our-mission .timeline-image img { width: 100%; }
-#our-mission { padding-top: 2em; padding-bottom: 0; background-image: url(../img/wood.jpg); background-repeat: no-repeat; background-position: center; background-color: #D3B382; }
+#our-mission { padding-top: 5em; padding-bottom: 0; background-image: url(../img/wood.jpg); background-repeat: no-repeat; background-position: center; background-color: #D3B382; }
 #our-mission h3 { margin-bottom: 3em; }
 #our-mission img#quinoa { float: right; position: absolute; top: 0; right: 0; margin-top: -7em; }
 #our-mission img#kale { position: absolute; width: 25em; top: 0; margin-top: -24em; margin-left: -3em; }
