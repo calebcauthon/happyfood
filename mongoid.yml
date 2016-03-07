@@ -1,0 +1,9 @@
+development:
+  clients:
+    default:
+      database: happyfood_dev
+      hosts:
+        - <%= ENV['MONGOLAB_URI'] %>
+      options:
+        user: <%= ENV['MONGOLAB_USER'] %>
+        password: <%= ENV['MONGOLAB_PW'] %>
