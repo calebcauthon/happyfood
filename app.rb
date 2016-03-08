@@ -28,4 +28,6 @@ post '/contact' do
       :phone => ng_params['phone'],
       :message => ng_params['message'])
   submission.save
+
+  "OK"
 end

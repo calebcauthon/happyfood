@@ -32,7 +32,12 @@
                     <div class="clearfix"></div>
                     <div class="col-lg-12 text-center">
                         <div id="success"></div>
-                        <button ng-click="ctrl.submit(name, email, phone, message)" type="submit" class="btn btn-xl">Send Message</button>
+                        <button
+                          ng-show="ctrl.status == 'waiting'"
+                          ng-click="ctrl.submit(name, email, phone, message)" type="submit" class="btn btn-xl">Send Message</button>
+                        <button
+                          ng-show="ctrl.status == 'sent'"
+                          type="submit" class="btn btn-xl">Sent!</button>
                     </div>
                 </div>
           </div>
@@ -43,11 +48,15 @@
 <script type="text/javascript" src="js/angular.min.js"></script>
 <script type="text/javascript">
   angular.module('contactFormApp', [])
-  .controller('contactFormCtrl', function($http) {
+  .controller('contactFormCtrl', function($http, $timeout) {
     var ctrl = this;
 
+    ctrl.status = 'waiting';
+
     ctrl.submit = function(name, email, phone, message) {
-      $http.post('/contact', {
+      ctrl.status = 'sent';
+
+      var result = $http.post('/contact', {
         name: name,
         email: email,
         phone: phone,
