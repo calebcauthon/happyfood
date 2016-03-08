@@ -1,0 +1,30 @@
+<div ng-app="contactFormAdminApp" ng-controller="contactFormAdminCtrl as ctrl">
+  <h1>Contact form submissions</h1>
+  <table class="table">
+    <thead>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Message</th>
+      <th>Timestamp</th>
+    </thead>
+    <tbody>
+      <tr ng-repeat="submission in ctrl.submissions | orderBy: 'updated_at' : true">
+        <td>{{ submission['name'] }}</td>
+        <td>{{ submission['email'] }}</td>
+        <td>{{ submission['message'] }}</td>
+        <td>{{ submission['updated_at'] }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script type="text/javascript">
+  angular.module('contactFormAdminApp', [])
+  .controller('contactFormAdminCtrl', function($http) {
+    var ctrl = this;
+
+    $http.post('/admin/contact.json').then(function(submissions) {
+      ctrl.submissions = submissions.data;
+    });
+  })
+</script>

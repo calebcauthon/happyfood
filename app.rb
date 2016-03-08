@@ -6,6 +6,7 @@ Mongoid.load!('mongoid.yml')
 
 class ContactForm
   include Mongoid::Document
+  include Mongoid::Timestamps
 
   store_in collection: "contact_forms"
 
@@ -30,4 +31,12 @@ post '/contact' do
   submission.save
 
   "OK"
+end
+
+get '/admin/contact' do
+  erb :'admin/contact', locals: { contact_form_submissions: ContactForm.all }, layout: :'admin/layout'
+end
+
+post '/admin/contact.json' do
+  ContactForm.all.to_json
 end
