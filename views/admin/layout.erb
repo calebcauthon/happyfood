@@ -29,6 +29,7 @@
     <script type="text/javascript" src="/js/moment.min.js"></script>
     <script type="text/javascript" src="/js/angular.min.js"></script>
     <script type="text/javascript" src="/js/angular-upload.min.js"></script>
+    <script type="text/javascript" src="/js/ui-bootstrap-tpls-1.2.4.min.js"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -284,6 +285,9 @@
                             <a href="/admin/contact"><i class="fa fa-dashboard fa-fw"></i>Contact Forms</a>
                         </li>
                         <li>
+                            <a href="/admin/recipes"><i class="fa fa-dashboard fa-fw"></i>Recipes</a>
+                        </li>
+                        <li>
                             <a href="/admin/add-recipe"><i class="fa fa-dashboard fa-fw"></i>Add Recipe</a>
                         </li>
                     </ul>
@@ -294,13 +298,6 @@
         </nav>
 
         <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Dashboard</h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
             <div class="row">
                 <div>
                   <%= yield %>

@@ -53,13 +53,29 @@ post '/admin/contact.json' do
   ContactForm.all.to_json
 end
 
+get '/admin/recipes' do
+  erb :'admin/recipes', locals: { }, layout: :'admin/layout'
+end
+
+post '/admin/recipes.json' do
+  Recipe.all.to_json
+end
+
+post '/admin/recipe.json' do
+  ng_params = JSON.parse(request.body.read)
+  Recipe.find(ng_params['recipe_id']).to_json
+end
+
 get '/admin/add-recipe' do
   erb :'admin/recipe-add', locals: { }, layout: :'admin/layout'
 end
 
+get '/admin/edit-recipe/:recipe_id' do
+  erb :'admin/recipe-add', locals: { recipe_id: params[:recipe_id] }, layout: :'admin/layout'
+end
+
 post '/admin/add-recipe' do
   ng_params = JSON.parse(request.body.read)
-  puts ng_params
   recipe = Recipe.new(
     :name => ng_params["name"],
     :image_url => ng_params["url"],
@@ -68,6 +84,15 @@ post '/admin/add-recipe' do
   recipe.save
 end
 
+post '/admin/update-recipe' do
+  ng_params = JSON.parse(request.body.read)
+  recipe = Recipe.find(ng_params['recipe_id'])
+  recipe.name = ng_params["name"]
+  recipe.image_url = ng_params["url"]
+  recipe.serving_options = ng_params["serving_options"]
+
+  recipe.save
+end
 
 post '/admin/add-recipe-image' do
   service = S3::Service.new(:access_key_id => ENV['AWS_ACCESS_KEY_ID'], :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY_ID'])

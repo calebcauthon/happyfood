@@ -1,9 +1,10 @@
 <div ng-app="addRecipeAdminApp" ng-controller="addRecipeAdminCtrl as ctrl">
+  <h1>Recipes</h1>
   <div class="well">
     <form>
       <div class="form-group">
         <label for="recipe-name">Name</label>
-        <input class="form-control" ng-model="recipe_name" name="recipe-name" />
+        <input class="form-control" ng-model="ctrl.recipe_name" name="recipe-name" />
       </div>
 
       <div class="form-group">
@@ -42,7 +43,7 @@
     </div>
 
     <div class="form-group pull-right">
-      <button ng-click="ctrl.save(recipe_name, ctrl.recipe_image_url, ctrl.serving_options)"class="btn btn-primary">Save</button>
+      <button ng-click="ctrl.save(ctrl.recipe_name, ctrl.recipe_image_url, ctrl.serving_options)"class="btn btn-primary">Save</button>
     </div>
     <br style="clear:both;" />
   </div>
@@ -52,6 +53,20 @@
   angular.module('addRecipeAdminApp', ['lr.upload'])
   .controller('addRecipeAdminCtrl', function($scope, $http, $location, upload) {
     var ctrl = this;
+    var is_new = <%= if recipe_id then 'false' else 'true' end %>;
+
+    if(!is_new) {
+      console.log('post!');
+      $http.post('/admin/recipe.json', { recipe_id: '<%= recipe_id %>' }).then(function(response) {
+        return response.data;
+      }).then(function(recipe) {
+        console.log('rec', recipe);
+        ctrl.recipe_name = recipe.name;
+        ctrl.serving_options = recipe.serving_options;
+        ctrl.recipe_image_url = recipe.image_url;
+        ctrl.recipe_id = recipe._id.$oid;
+      });
+    }
 
     ctrl.serving_options = [];
 
@@ -84,13 +99,23 @@
     };
 
     ctrl.save = function(name, url, serving_options) {
-      $http.post('/admin/add-recipe', {
-        name: name,
-        url: url,
-        serving_options: serving_options
-      }).then(function() {
-        //window.location('/admin/recipes');
-      });
+      if(is_new)
+        $http.post('/admin/add-recipe', {
+          name: name,
+          url: url,
+          serving_options: serving_options
+        }).then(function() {
+          window.location = '/admin/recipes';
+        });
+      else
+        $http.post('/admin/update-recipe', {
+          recipe_id: ctrl.recipe_id,
+          name: name,
+          url: url,
+          serving_options: serving_options
+        }).then(function() {
+          window.location = '/admin/recipes';
+        });
     };
   });
 </script>

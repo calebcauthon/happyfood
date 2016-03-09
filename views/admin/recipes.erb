@@ -2,29 +2,86 @@
   <h1>Recipes</h1>
   <table class="table">
     <thead>
-      <th>Name</th>
+      <th colspan="2"></th>
+      <th colspan="2">Name</th>
       <th>Serving options</th>
-      <th>Message</th>
       <th>Timestamp</th>
     </thead>
     <tbody>
-      <tr ng-repeat="submission in ctrl.submissions | orderBy: 'updated_at' : true">
-        <td>{{ submission['name'] }}</td>
-        <td>{{ submission['email'] }}</td>
-        <td>{{ submission['message'] }}</td>
-        <td>{{ submission['updated_at'] }}</td>
+      <tr ng-repeat="recipe in ctrl.recipes | orderBy: 'name'">
+        <td>
+          <a href="/admin/edit-recipe/{{recipe._id.$oid}}">edit</a>
+        </td>
+        <td>
+          <a ng-click="ctrl.confirmRemoval(recipe)" href="#">delete</a>
+        </td>
+        <td>
+          {{ recipe['name'] }}
+        </td>
+        <td>
+          <img width=75 height=75 ng-src="{{ recipe['image_url'] }}" />
+        </td>
+        <td>
+          <ul>
+            <li ng-repeat="option in recipe.serving_options">
+              {{ option.servings }} servings for ${{ option.dollars }}
+            </li>
+          </ul>
+        </td>
+        <td>{{ recipe['updated_at'] }}</td>
       </tr>
     </tbody>
   </table>
+  <script type="text/ng-template" id="confirmRemoval.html">
+      <div class="modal-header">
+          <h3 class="modal-title">Delete {{ recipe.name }}?</h3>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+          <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+          <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+      </div>
+  </script>
 </div>
-
 <script type="text/javascript">
-  angular.module('contactFormAdminApp', [])
-  .controller('contactFormAdminCtrl', function($http) {
+  angular.module('recipesAdminApp', ['ui.bootstrap'])
+  .controller('recipesAdminCtrl', function($http, $uibModal, $log) {
     var ctrl = this;
 
-    $http.post('/admin/contact.json').then(function(submissions) {
-      ctrl.submissions = submissions.data;
+    ctrl.confirmRemoval = function(recipe) {
+      var modalInstance = $uibModal.open({
+        templateUrl: 'confirmRemoval.html',
+        controller: function($scope, $uibModalInstance, recipe) {
+          $scope.recipe = recipe;
+
+          $scope.ok = function() {
+            $uibModalInstance.close(recipe);
+          };
+
+          $scope.cancel = function() {
+            $uibModalInstance.dismiss();
+          };
+        },
+        size: 'sm',
+        resolve: {
+          recipe: function () {
+            return recipe;
+          }
+        }
+      });
+
+      modalInstance.result.then(function (recipe) {
+        console.log('delete', recipe);
+      }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
+      });
+    };
+
+    $http.post('/admin/recipes.json').then(function(response) {
+      return response.data;
+    }).then(function(recipes) {
+      ctrl.recipes = recipes;
     });
   })
 </script>
