@@ -7,7 +7,7 @@
           </div>
       </div>
       <div class="row">
-          <div class="col-lg-12" ng-app="contactFormApp" ng-controller="contactFormCtrl as ctrl">
+          <div class="col-lg-12" id="contactFormApp" ng-controller="contactFormCtrl as ctrl">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -45,7 +45,6 @@
   </div>
 </section>
 
-<script type="text/javascript" src="js/angular.min.js"></script>
 <script type="text/javascript">
   angular.module('contactFormApp', [])
   .controller('contactFormCtrl', function($http, $timeout) {
@@ -63,5 +62,7 @@
         message: message
       });
     };
-  })
+  });
+
+  angular.bootstrap(angular.element(document.getElementById('contactFormApp')), ['contactFormApp'])
 </script>

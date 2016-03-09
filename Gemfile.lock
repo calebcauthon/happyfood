@@ -23,9 +23,12 @@ GEM
       origin (~> 2.2)
       tzinfo (>= 0.3.37)
     origin (2.2.0)
+    proxies (0.2.1)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
+    s3 (0.3.24)
+      proxies (~> 0.2.0)
     sinatra (1.4.7)
       rack (~> 1.5)
       rack-protection (~> 1.4)
@@ -40,6 +43,7 @@ PLATFORMS
 
 DEPENDENCIES
   mongoid (~> 5.1.0)
+  s3
   sinatra
 
 BUNDLED WITH
