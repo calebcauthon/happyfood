@@ -1,4 +1,4 @@
-<div ng-app="recipesAdminApp" ng-controller="recipesAdminCtrl as ctrl">
+<div>
   <h1>Recipes</h1>
   <table class="table">
     <thead>
@@ -10,7 +10,7 @@
     <tbody>
       <tr ng-repeat="recipe in ctrl.recipes | orderBy: 'name'">
         <td>
-          <a href="/admin/edit-recipe/{{recipe._id.$oid}}">edit</a>
+          <a ng-click="ctrl.edit(recipe)">edit</a>
         </td>
         <td>
           <a ng-click="ctrl.confirmRemoval(recipe)" href="#">delete</a>
@@ -44,44 +44,3 @@
       </div>
   </script>
 </div>
-<script type="text/javascript">
-  angular.module('recipesAdminApp', ['ui.bootstrap'])
-  .controller('recipesAdminCtrl', function($http, $uibModal, $log) {
-    var ctrl = this;
-
-    ctrl.confirmRemoval = function(recipe) {
-      var modalInstance = $uibModal.open({
-        templateUrl: 'confirmRemoval.html',
-        controller: function($scope, $uibModalInstance, recipe) {
-          $scope.recipe = recipe;
-
-          $scope.ok = function() {
-            $uibModalInstance.close(recipe);
-          };
-
-          $scope.cancel = function() {
-            $uibModalInstance.dismiss();
-          };
-        },
-        size: 'sm',
-        resolve: {
-          recipe: function () {
-            return recipe;
-          }
-        }
-      });
-
-      modalInstance.result.then(function (recipe) {
-        console.log('delete', recipe);
-      }, function () {
-        $log.info('Modal dismissed at: ' + new Date());
-      });
-    };
-
-    $http.post('/admin/recipes.json').then(function(response) {
-      return response.data;
-    }).then(function(recipes) {
-      ctrl.recipes = recipes;
-    });
-  })
-</script>

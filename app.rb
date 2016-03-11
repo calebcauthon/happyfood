@@ -26,6 +26,7 @@ class Recipe
   field :name, type: String
   field :image_url, type: String
   field :serving_options, type: Array
+  field :deleted, type: Boolean
 end
 
 set :public_folder, 'public'
@@ -53,12 +54,12 @@ post '/admin/contact.json' do
   ContactForm.all.to_json
 end
 
-get '/admin/recipes' do
-  erb :'admin/recipes', locals: { }, layout: :'admin/layout'
+get '/admin-recipes' do
+  send_file 'views/admin/layout.html'
 end
 
 post '/admin/recipes.json' do
-  Recipe.all.to_json
+  Recipe.where(:deleted.exists => false).all.to_json
 end
 
 post '/admin/recipe.json' do
@@ -67,11 +68,21 @@ post '/admin/recipe.json' do
 end
 
 get '/admin/add-recipe' do
-  erb :'admin/recipe-add', locals: { }, layout: :'admin/layout'
+  erb :'admin/recipe-add', locals: { recipe_id: nil }, layout: :'admin/layout'
 end
 
 get '/admin/edit-recipe/:recipe_id' do
   erb :'admin/recipe-add', locals: { recipe_id: params[:recipe_id] }, layout: :'admin/layout'
+end
+
+post '/admin/remove-recipe' do
+
+  ng_params = JSON.parse(request.body.read)
+  recipe = Recipe.find(ng_params['recipe_id'])
+  recipe.deleted = true
+  recipe.save
+
+  recipe.to_json
 end
 
 post '/admin/add-recipe' do

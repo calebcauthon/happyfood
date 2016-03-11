@@ -15,7 +15,7 @@
                         <i class="fa fa-eye fa-3x"></i>
                     </div>
                 </div>
-                <img ng-src="{{ recipe.image }}" class="img-responsive" alt="">
+                <img ng-src="{{ recipe.image_url }}" class="img-responsive" alt="">
             </a>
             <div class="portfolio-caption">
                 <div class="row">
@@ -25,7 +25,7 @@
                   <select
                     ng-init="serving=recipe.serving_options[0]"
                     ng-model="serving"
-                    ng-options="tuple for tuple in recipe.serving_options"></select>
+                    ng-options="option as option.servings + ' servings for $' + option.dollars for option in recipe.serving_options"></select>
                   <span class="pull-right fa fa-shopping-cart">Add to cart</span>
                 </div>
             </div>
@@ -33,21 +33,15 @@
     </div>
 </div>
 
+<script type="text/javascript" src="/js/services.js"></script>
 <script type="text/javascript">
-  angular.module('orderApp', [])
-  .controller('orderCtrl', function($http, $timeout) {
+  angular.module('orderApp', ['services'])
+  .controller('orderCtrl', function($http, $timeout, recipes) {
     var ctrl = this;
 
-    ctrl.recipes = [
-      {
-        name: 'Thai Tofu Quinoa Bowls',
-        image: '/img/recipes/thai.jpg',
-        serving_options: [
-          '4 servings for $30',
-          '6 servings for $40'
-        ]
-      }
-    ];
+    recipes.get().then(function(all_recipes) {
+      ctrl.recipes = all_recipes;
+    });
   })
 
   angular.bootstrap(angular.element(document.getElementById('orderApp')), ['orderApp'])

@@ -1,0 +1,50 @@
+<div>
+  <h1>Recipes</h1>
+  <div class="well">
+    <form>
+      <div class="form-group">
+        <label for="recipe-name">Name</label>
+        <input class="form-control" ng-model="ctrl.recipe_name" name="recipe-name" />
+      </div>
+
+      <div class="form-group">
+        <label for="recipe-image">Image</label>
+        <span ng-show="ctrl.uploading">Uploading image...</span>
+        <input ng-show="!ctrl.uploading" id="recipe-image" onchange="angular.element(this).scope().ctrl.uploadFile()" type="file" />
+        <br />
+        <img style="border: 1px solid black; background: wrhite;" ng-src="{{ctrl.recipe_image_url}}" height=150 width=150 />
+      </div>
+    </form>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-4">
+          <label>Serving Options</label>
+          <ul>
+            <li
+              ng-hide="option.removed"
+              ng-repeat="option in ctrl.serving_options">
+              {{ option.servings }} servings for ${{ option.dollars }}
+              <span
+                ng-click="ctrl.remove(option)"
+                class="hover-red clickable fa fa-remove"></span>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-8">
+          <label>Servings</label>
+          <input ng-model="servings" style="width: 5rem;" />
+
+          <label>Dollars</label>
+          <input ng-model="dollars" style="width: 5rem;" />
+
+          <button ng-click="ctrl.add_serving_option(servings, dollars); servings=null; dollars=null;" class="btn btn-success">Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group pull-right">
+      <button ng-click="ctrl.save(ctrl.recipe_name, ctrl.recipe_image_url, ctrl.serving_options)"class="btn btn-primary">Save</button>
+    </div>
+    <br style="clear:both;" />
+  </div>
+</div>

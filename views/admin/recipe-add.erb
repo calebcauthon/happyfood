@@ -56,11 +56,9 @@
     var is_new = <%= if recipe_id then 'false' else 'true' end %>;
 
     if(!is_new) {
-      console.log('post!');
       $http.post('/admin/recipe.json', { recipe_id: '<%= recipe_id %>' }).then(function(response) {
         return response.data;
       }).then(function(recipe) {
-        console.log('rec', recipe);
         ctrl.recipe_name = recipe.name;
         ctrl.serving_options = recipe.serving_options;
         ctrl.recipe_image_url = recipe.image_url;

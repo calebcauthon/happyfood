@@ -29,7 +29,11 @@
     <script type="text/javascript" src="/js/moment.min.js"></script>
     <script type="text/javascript" src="/js/angular.min.js"></script>
     <script type="text/javascript" src="/js/angular-upload.min.js"></script>
+    <script type="text/javascript" src="/js/angular-ui-router.min.js"></script>
     <script type="text/javascript" src="/js/ui-bootstrap-tpls-1.2.4.min.js"></script>
+    <script type="text/javascript" src="/js/underscore-min.js"></script>
+
+    <script type="text/javascript" src="/js/adminApp/app.js"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -40,7 +44,7 @@
 
 </head>
 
-<body>
+<body ng-app="adminApp">
 
     <div id="wrapper">
 
@@ -282,13 +286,13 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="/admin/contact"><i class="fa fa-dashboard fa-fw"></i>Contact Forms</a>
+                            <a ui-sref="contact-forms"><i class="fa fa-dashboard fa-fw"></i>Contact Forms</a>
                         </li>
                         <li>
-                            <a href="/admin/recipes"><i class="fa fa-dashboard fa-fw"></i>Recipes</a>
+                            <a ui-sref="recipes"><i class="fa fa-dashboard fa-fw"></i>Recipes</a>
                         </li>
                         <li>
-                            <a href="/admin/add-recipe"><i class="fa fa-dashboard fa-fw"></i>Add Recipe</a>
+                            <a ui-sref="add-recipe"><i class="fa fa-dashboard fa-fw"></i>Add Recipe</a>
                         </li>
                     </ul>
                 </div>
@@ -300,7 +304,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div>
-                  <%= yield %>
+                    <div ui-view></div>
                 </div>
             </div>
         </div>
