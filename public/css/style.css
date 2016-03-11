@@ -24,3 +24,8 @@
       margin-bottom: 50px;
   }
 }
+
+#order .portfolio-item .portfolio-caption .row { margin-left: 0; margin-right: 0; }
+#order .portfolio-item .portfolio-caption { padding: 0; text-align: left; }
+#order .cart { cursor: pointer; }
+#order .cart:hover { color: blue; }

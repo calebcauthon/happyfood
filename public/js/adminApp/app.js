@@ -1,4 +1,4 @@
-angular.module('adminApp', ['ui.bootstrap', 'ui.router', 'lr.upload'])
+angular.module('adminApp', ['services', 'ui.bootstrap', 'ui.router', 'lr.upload'])
 
 .config(function($stateProvider, $urlRouterProvider) {
 
@@ -72,7 +72,7 @@ angular.module('adminApp', ['ui.bootstrap', 'ui.router', 'lr.upload'])
   };
 })
 
-.controller('editRecipeAdminCtrl', function($scope, $http, $location, upload, $stateParams) {
+.controller('editRecipeAdminCtrl', function($scope, $http, $location, upload, $state, $stateParams) {
   var ctrl = this;
 
   var recipe = $stateParams.recipe;
@@ -161,8 +161,8 @@ angular.module('adminApp', ['ui.bootstrap', 'ui.router', 'lr.upload'])
   };
 
   function getRecipes() {
-    recipes.get().then(function(recipes) {
-      ctrl.recipes = recipes;
+    recipes.get().then(function(all_recipes) {
+      ctrl.recipes = all_recipes;
     });
   }
 
