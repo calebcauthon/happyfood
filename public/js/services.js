@@ -5,11 +5,11 @@ angular.module('services', [])
 
   var result;
 
-  self.get = _.memoize(function() {
+  self.get = function() {
     return $http.post('/admin/recipes.json').then(function(response) {
       return response.data;
     });
-  });
+  };
 
   return self;
 })

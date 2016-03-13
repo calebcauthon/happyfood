@@ -2,3 +2,10 @@ table th, table td { padding: 1rem; }
 
 .clickable { cursor: pointer; }
 .hover-red:hover { color: red; }
+
+#admin-recipes { }
+#admin-recipes .serving-options ul { margin: 0; padding: 0; }
+#admin-recipes .serving-options li { list-style-type: none; }
+#admin-recipes .thumbnail-cell img { max-height: 3em; }
+#admin-recipes td { height: 3em; }
+#admin-recipes td.name { white-space: nowrap; }

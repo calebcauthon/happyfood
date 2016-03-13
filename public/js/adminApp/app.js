@@ -1,4 +1,4 @@
-angular.module('adminApp', ['services', 'ui.bootstrap', 'ui.router', 'lr.upload'])
+angular.module('adminApp', ['services', 'ui.bootstrap', 'ui.router', 'lr.upload', 'angularMoment'])
 
 .config(function($stateProvider, $urlRouterProvider) {
 
@@ -28,8 +28,10 @@ angular.module('adminApp', ['services', 'ui.bootstrap', 'ui.router', 'lr.upload'
     })
 })
 
-.controller('addRecipeAdminCtrl', function($scope, $http, $location, upload) {
+.controller('addRecipeAdminCtrl', function($scope, $http, $location, $state, upload) {
   var ctrl = this;
+
+  ctrl.meal_options = ['breakfast', 'lunch', 'snacks', 'dinner', 'dessert'];
 
   ctrl.serving_options = [];
 
@@ -61,12 +63,15 @@ angular.module('adminApp', ['services', 'ui.bootstrap', 'ui.router', 'lr.upload'
     });
   };
 
-  ctrl.save = function(name, url, serving_options) {
+  ctrl.save = function(name, meal, url, serving_options) {
+    ctrl.saving = true;
     $http.post('/admin/add-recipe', {
       name: name,
+      meal: meal,
       url: url,
       serving_options: serving_options
     }).then(function() {
+      ctrl.saving = false;
       $state.go('recipes');
     });
   };
@@ -78,9 +83,12 @@ angular.module('adminApp', ['services', 'ui.bootstrap', 'ui.router', 'lr.upload'
   var recipe = $stateParams.recipe;
 
   ctrl.recipe_name = recipe.name;
+  ctrl.recipe_meal = recipe.meal;
   ctrl.serving_options = recipe.serving_options;
   ctrl.recipe_image_url = recipe.image_url;
   ctrl.recipe_id = recipe._id.$oid;
+
+  ctrl.meal_options = ['breakfast', 'lunch', 'snacks', 'dinner', 'dessert'];
 
   ctrl.remove = function(option) {
     option.removed = true;
@@ -110,15 +118,22 @@ angular.module('adminApp', ['services', 'ui.bootstrap', 'ui.router', 'lr.upload'
     });
   };
 
-  ctrl.save = function(name, url, serving_options) {
+  ctrl.save = function(name, meal, url, serving_options) {
+    ctrl.saving = true;
     $http.post('/admin/update-recipe', {
       recipe_id: recipe._id.$oid,
+      meal: meal,
       name: name,
       url: url,
       serving_options: serving_options
     }).then(function() {
+      ctrl.saving = false;
       $state.go('recipes');
     });
+  };
+
+  ctrl.goToRecipes = function() {
+    $state.go('recipes');
   };
 })
 

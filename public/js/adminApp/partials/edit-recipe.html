@@ -8,11 +8,16 @@
       </div>
 
       <div class="form-group">
+        <label for="recipe-name">Meal</label>
+        <select ng-model="ctrl.recipe_meal" ng-options="meal for meal in ctrl.meal_options"></select>
+      </div>
+
+      <div class="form-group">
         <label for="recipe-image">Image</label>
         <span ng-show="ctrl.uploading">Uploading image...</span>
         <input ng-show="!ctrl.uploading" id="recipe-image" onchange="angular.element(this).scope().ctrl.uploadFile()" type="file" />
         <br />
-        <img style="border: 1px solid black; background: wrhite;" ng-src="{{ctrl.recipe_image_url}}" height=150 width=150 />
+        <img style="border: 1px solid black; background: white;" ng-src="{{ctrl.recipe_image_url}}" height=150 width=150 />
       </div>
     </form>
     <div class="container-fluid">
@@ -43,7 +48,11 @@
     </div>
 
     <div class="form-group pull-right">
-      <button ng-click="ctrl.save(ctrl.recipe_name, ctrl.recipe_image_url, ctrl.serving_options)"class="btn btn-primary">Save</button>
+      <button
+        style="margin-right: 1em;"
+        ng-click="ctrl.goToRecipes()"class="btn btn-warning">Cancel</button>
+      <button ng-hide="ctrl.saving" ng-click="ctrl.save(ctrl.recipe_name, ctrl.recipe_meal, ctrl.recipe_image_url, ctrl.serving_options)" class="btn btn-primary">Save</button>
+      <button ng-show="ctrl.saving" class="btn btn-primary">Saving...</button>
     </div>
     <br style="clear:both;" />
   </div>

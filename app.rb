@@ -24,6 +24,7 @@ class Recipe
   store_in collection: "recipe_catalogue"
 
   field :name, type: String
+  field :meal, type: String
   field :image_url, type: String
   field :serving_options, type: Array
   field :deleted, type: Boolean
@@ -89,6 +90,7 @@ post '/admin/add-recipe' do
   ng_params = JSON.parse(request.body.read)
   recipe = Recipe.new(
     :name => ng_params["name"],
+    :meal => ng_params["meal"],
     :image_url => ng_params["url"],
     :serving_options => ng_params["serving_options"]
   )
@@ -99,6 +101,7 @@ post '/admin/update-recipe' do
   ng_params = JSON.parse(request.body.read)
   recipe = Recipe.find(ng_params['recipe_id'])
   recipe.name = ng_params["name"]
+  recipe.meal = ng_params["meal"]
   recipe.image_url = ng_params["url"]
   recipe.serving_options = ng_params["serving_options"]
 

@@ -4,9 +4,17 @@
             <h2 class="section-heading">Order</h2>
         </div>
     </div>
+    <div class="row menu">
+      <div ng-class="{ 'highlighted': ctrl.section == 'all' }" ng-click="ctrl.showMenu('all')" class="col-md-1 col-md-offset-3">All</div>
+      <div ng-class="{ 'highlighted': ctrl.section == 'breakfast' }" ng-click="ctrl.showMenu('breakfast')" class="col-md-1">Breakfast</div>
+      <div ng-class="{ 'highlighted': ctrl.section == 'lunch' }" ng-click="ctrl.showMenu('lunch')" class="col-md-1">Lunch</div>
+      <div ng-class="{ 'highlighted': ctrl.section == 'dinner' }" ng-click="ctrl.showMenu('dinner')" class="col-md-1">Dinner</div>
+      <div ng-class="{ 'highlighted': ctrl.section == 'snacks' }" ng-click="ctrl.showMenu('snacks')" class="col-md-1">Snacks</div>
+      <div ng-class="{ 'highlighted': ctrl.section == 'dessert' }" ng-click="ctrl.showMenu('dessert')" class="col-md-1">Dessert</div>
+    </div>
     <div class="row">
         <div
-          ng-repeat="recipe in ctrl.recipes"
+          ng-repeat="recipe in ctrl.recipes | filter: ctrl.isMeal(ctrl.section)"
           class="col-md-4 col-sm-6 portfolio-item">
             <a href="#thai" class="portfolio-link" data-toggle="modal">
                 <div class="portfolio-hover">
@@ -20,14 +28,28 @@
                 <div class="row" style="height: 3em;">
                   <span class="pull-left"><strong>{{ recipe.name }}</strong></span>
                 </div>
-                <div class="row"></div>
+                <div class="row">
                   <select
+                    ng-hide="ctrl.isInCart(recipe)"
                     ng-init="serving=recipe.serving_options[0]"
                     ng-model="serving"
                     ng-options="option as option.servings + ' servings for $' + option.dollars for option in recipe.serving_options"></select>
-                  <button class="pull-right cart"><span style="margin-right: .25em;" class="fa fa-shopping-cart"></span>Add to cart</button>
+
+                  <span ng-show="ctrl.isInCart(recipe)">{{ ctrl.cartSelection(recipe).serving_option.servings }} servings for ${{ ctrl.cartSelection(recipe).serving_option.dollars }}</span>
+
+                  <button
+                    ng-show="!ctrl.isInCart(recipe)"
+                    ng-click="ctrl.addToCart(recipe, serving)"
+                    class="pull-right cart"><span style="margin-right: .25em;" class="fa fa-shopping-cart"></span>Add to cart</button>
+                  <button
+                    ng-show="ctrl.isInCart(recipe)"
+                    ng-click="ctrl.removeFromCart(recipe)"
+                    class="pull-right cart"><span style="margin-right: .25em;" class="fa fa-check"></span>Added</button>
                 </div>
             </div>
+        </div>
+        <div class="text-center">
+          <button class="btn btn-success"><span class=""></span>Checkout</button>
         </div>
     </div>
 </div>
@@ -37,6 +59,41 @@
   angular.module('orderApp', ['services'])
   .controller('orderCtrl', function($http, $timeout, recipes) {
     var ctrl = this;
+
+    ctrl.isMeal = function(desired_meal) {
+      return function(recipe) {
+        return recipe.meal == desired_meal || desired_meal == 'all';
+      };
+    };
+
+    ctrl.section = 'all';
+    ctrl.showMenu = function(section) {
+      ctrl.section = section;
+    };
+
+    ctrl.cart = [];
+
+    ctrl.isInCart = function(recipe) {
+      return _.find(ctrl.cart, function(cart_recipe) {
+        return cart_recipe.recipe == recipe;
+      });
+    };
+
+    ctrl.cartSelection = function(recipe) {
+      return _.find(ctrl.cart, function(cart_recipe) {
+        return cart_recipe.recipe == recipe;
+      });
+    }
+
+    ctrl.addToCart = function(recipe, serving_option) {
+      ctrl.cart.push({ recipe: recipe, serving_option: serving_option });
+    };
+
+    ctrl.removeFromCart = function(recipe) {
+      ctrl.cart = _.reject(ctrl.cart, function(cart_selection) {
+        return cart_selection.recipe == recipe;
+      });
+    };
 
     recipes.get().then(function(all_recipes) {
       ctrl.recipes = all_recipes;

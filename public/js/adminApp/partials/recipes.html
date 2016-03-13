@@ -1,34 +1,36 @@
 <div>
   <h1>Recipes</h1>
-  <table class="table">
+  <table class="table" id="admin-recipes">
     <thead>
-      <th colspan="2"></th>
-      <th colspan="2">Name</th>
-      <th>Serving options</th>
-      <th>Timestamp</th>
+      <td></td>
+      <td></td>
+      <td>Servings</td>
+    </thead>
     </thead>
     <tbody>
       <tr ng-repeat="recipe in ctrl.recipes | orderBy: 'name'">
-        <td>
-          <a ng-click="ctrl.edit(recipe)">edit</a>
+        <td class="thumbnail-cell">
+          <img ng-src="{{ recipe['image_url'] }}" />
         </td>
-        <td>
-          <a ng-click="ctrl.confirmRemoval(recipe)" href="#">delete</a>
+        <td class="name">
+          <strong>{{ recipe['name'] }}</strong>
+          <br />
+          {{ recipe['meal'] }}
         </td>
-        <td>
-          {{ recipe['name'] }}
-        </td>
-        <td>
-          <img width=75 height=75 ng-src="{{ recipe['image_url'] }}" />
-        </td>
-        <td>
+        <td class="serving-options">
           <ul>
             <li ng-repeat="option in recipe.serving_options">
-              {{ option.servings }} servings for ${{ option.dollars }}
+              {{ option.servings }} / ${{ option.dollars }}
             </li>
           </ul>
         </td>
-        <td>{{ recipe['updated_at'] }}</td>
+        <td ng-show="false">{{ recipe['updated_at'] | amDateFormat:'dddd, MMMM Do YYYY'}}</td>
+        <td>
+          <a ng-click="ctrl.edit(recipe)"><span class="clickable fa fa-pencil"></span></a>
+        </td>
+        <td>
+          <a ng-click="ctrl.confirmRemoval(recipe)"><span class="clickable fa fa-trash"></span></a>
+        </td>
       </tr>
     </tbody>
   </table>
