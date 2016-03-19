@@ -33,3 +33,5 @@
 .menu { background: #B4B4B4; margin-bottom: 2em; }
 .menu > div { cursor: pointer; text-align: center; height: 3em; text-transform: lowercase; padding: 1.5em 0 3em; font-weight: bold; }
 .menu > div.highlighted { background-color: black; color: white; }
+
+.clickable { cursor: pointer; }

@@ -1,14 +1,194 @@
 <div class="container" id="orderApp" ng-controller="orderCtrl as ctrl">
-    <div class="row">
+    <div class="col-lg-12 text-center" ng-show="ctrl.order_step == 'checking_out'">
+        <div style="left: 0; position: absolute;">
+          <button
+            ng-click="ctrl.order_step = 'shopping'"
+            class="btn btn-warning"><span class=""></span>&lt; Continue Shopping</button>
+        </div>
+        <h2 class="section-heading">Order</h2>
+    </div>
+    <div class="row" ng-show="ctrl.order_step == 'checking_out'">
+      <div>
+        <table class="table">
+          <thead>
+            <th><strong>Description</strong></th>
+            <th><strong>Cost</strong></th>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in ctrl.cart">
+              <td>{{ item.recipe.name }} ({{ item.serving_option.servings }} servings)</td>
+              <td>${{ item.serving_option.dollars }}</td>
+            </tr>
+            <tr>
+              <td class="text-right">
+                <strong>Total:</strong>
+              </td>
+              <td>
+                <strong>${{ ctrl.total(ctrl.cart) }}</strong>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <button
+                  ng-click="ctrl.order_step = 'enter_address'"
+                  class="btn btn-success pull-right"><span class=""></span>Enter Delivery Address &gt;</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-lg-12 text-center" ng-show="ctrl.order_step == 'enter_address'">
+        <div style="left: 0; position: absolute;">
+          <button
+            ng-click="ctrl.order_step = 'shopping'"
+            class="btn btn-warning"><span class=""></span>&lt; Continue Shopping</button>
+        </div>
+        <h2 class="section-heading">Order</h2>
+    </div>
+    <div class="row" ng-show="ctrl.order_step == 'enter_address'">
+      <h4>Enter your shipping address below</h4>
+
+      <form class="form-horizontal" ng-init="ctrl.shipping = {}">
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Address 1</label>
+          <div class="col-sm-10">
+            <input ng-model="ctrl.shipping.address_1" class="form-control" placeholder="(e.g., 742 Evergreen Terr #385)" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Address 2 (optional)</label>
+          <div class="col-sm-10">
+            <input class="form-control" ng-model="ctrl.shipping.address_2" placeholder="" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">City</label>
+          <div class="col-sm-10">
+            <input class="form-control" ng-model="ctrl.shipping.city" placeholder="Kansas City" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">State</label>
+          <div class="col-sm-10">
+            <input class="form-control" ng-model="ctrl.shipping.state" placeholder="NY" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">ZIP</label>
+          <div class="col-sm-10">
+            <input class="form-control" ng-model="ctrl.shipping.zip" placeholder="90210)" />
+          </div>
+        </div>
+      </form>
+      <button
+            ng-click="ctrl.order_step = 'enter_payment'"
+            class="btn btn-success pull-right"><span class=""></span>Enter Payment Information &gt; </button>
+    </div>
+
+    <div class="col-lg-12 text-center" ng-show="ctrl.order_step == 'enter_payment'">
+        <div style="left: 0; position: absolute;">
+          <button
+            ng-click="ctrl.order_step = 'shopping'"
+            class="btn btn-warning"><span class=""></span>&lt; Continue Shopping</button>
+        </div>
+        <h2 class="section-heading">Order</h2>
+    </div>
+    <div class="row" ng-show="ctrl.order_step == 'enter_payment'">
+      <h4>Enter your Payment Information below</h4>
+
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Card No</label>
+          <div class="col-sm-10">
+            <input ng-model="ctrl.payment.number" class="form-control" placeholder="0000 0000 0000 0000" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Expiration</label>
+          <div class="col-sm-10">
+            <input class="form-control" ng-model="ctrl.payment.expiration" placeholder="MM/YY" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Security Code</label>
+          <div class="col-sm-10">
+            <input class="form-control" ng-model="ctrl.payment.code" placeholder="123" />
+          </div>
+        </div>
+
+        <button
+            ng-click="ctrl.order_step = 'review_purchase'"
+            class="btn btn-success pull-right"><span class=""></span>Review Purchase &gt; </button>
+    </div>
+
+    <div class="col-lg-12 text-center" ng-show="ctrl.order_step == 'review_purchase'">
+        <div style="left: 0; position: absolute;">
+          <button
+            ng-click="ctrl.order_step = 'shopping'"
+            class="btn btn-warning"><span class=""></span>&lt; Continue Shopping</button>
+        </div>
+        <h2 class="section-heading">Order</h2>
+    </div>
+    <div class="row" ng-show="ctrl.order_step == 'review_purchase'">
+      <h4>Review your purchase below</h4>
+
+      <table class="table">
+        <thead>
+          <th><strong>Description</strong></th>
+          <th><strong>Cost</strong></th>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in ctrl.cart">
+            <td>{{ item.recipe.name }} ({{ item.serving_option.servings }} servings)</td>
+            <td>${{ item.serving_option.dollars }}</td>
+          </tr>
+          <tr>
+            <td class="text-right">
+              <strong>Total:</strong>
+            </td>
+            <td>
+              <strong>${{ ctrl.total(ctrl.cart) }}</strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h5>Delivery Address <a class="clickable" ng-click="ctrl.order_step = 'enter_address'">(change)</a></h5>
+      <p>{{ ctrl.shipping.address_1 }}</p>
+      <p ng-show="ctrl.shipping.address_2">{{ ctrl.shipping.address_2 }}</p>
+      <p>{{ ctrl.shipping.city }}, {{ ctrl.shipping.state }} {{ ctrl.shipping.zip }}</p>
+
+      <h5>Payment <a class="clickable" ng-click="ctrl.order_step = 'enter_payment'">(change)</a></h5>
+      <p>{{ ctrl.payment.number }} - {{ ctrl.payment.expiration }}</p>
+
+
+      <button
+        ng-click="ctrl.authorizePayment()"
+        class="btn btn-success pull-right"><span class=""></span>Submit Transaction for ${{ ctrl.total(ctrl.cart) }}</button>
+
+      <button
+        style="margin-right: 1em;"
+        ng-click="ctrl.order_step = 'shopping'"
+        class="btn btn-warning pull-right"><span class=""></span>Continue Browsing</button>
+    </div>
+
+
+    <div class="row" ng-show="ctrl.order_step == 'shopping'">
         <div class="col-lg-12 text-center">
             <div style="right: 0; position: absolute;">
-              <button class="btn btn-success"><span class=""></span>Checkout</button>
+              <button
+                ng-click="ctrl.order_step = 'checking_out'"
+                class="btn btn-success"><span class=""></span>Checkout</button>
             </div>
             <h2 class="section-heading">Order</h2>
-
         </div>
     </div>
-    <div class="row menu">
+    <div class="row menu" ng-show="ctrl.order_step == 'shopping'">
       <div ng-class="{ 'highlighted': ctrl.section == 'all' }" ng-click="ctrl.showMenu('all')" class="col-md-1 col-md-offset-3">All</div>
       <div ng-class="{ 'highlighted': ctrl.section == 'breakfast' }" ng-click="ctrl.showMenu('breakfast')" class="col-md-1">Breakfast</div>
       <div ng-class="{ 'highlighted': ctrl.section == 'lunch' }" ng-click="ctrl.showMenu('lunch')" class="col-md-1">Lunch</div>
@@ -16,7 +196,8 @@
       <div ng-class="{ 'highlighted': ctrl.section == 'snacks' }" ng-click="ctrl.showMenu('snacks')" class="col-md-1">Snacks</div>
       <div ng-class="{ 'highlighted': ctrl.section == 'dessert' }" ng-click="ctrl.showMenu('dessert')" class="col-md-1">Dessert</div>
     </div>
-    <div class="row">
+
+    <div class="row" ng-show="ctrl.order_step == 'shopping'">
         <div
           ng-repeat="recipe in ctrl.recipes | filter: ctrl.isMeal(ctrl.section)"
           class="col-md-4 col-sm-6 portfolio-item">
@@ -67,6 +248,7 @@
       };
     };
 
+    ctrl.order_step = 'shopping';
     ctrl.section = 'all';
     ctrl.showMenu = function(section) {
       ctrl.section = section;
@@ -94,6 +276,12 @@
       ctrl.cart = _.reject(ctrl.cart, function(cart_selection) {
         return cart_selection.recipe == recipe;
       });
+    };
+
+    ctrl.total = function(cart_items) {
+      return _.reduce(cart_items, function(sum, item) {
+        return sum + Number(item.serving_option.dollars);
+      }, 0);
     };
 
     recipes.get().then(function(all_recipes) {
