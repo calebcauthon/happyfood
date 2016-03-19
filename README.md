@@ -13,3 +13,9 @@ export MONGOLAB_URI=whatever.database.com:12345
 export MONGOLAB_USER=username
 export MONGOLAB_PW=password
 ```
+
+
+### Local mongo server
+```
+mongod --dbpath /usr/local/var/mongodb
+```
