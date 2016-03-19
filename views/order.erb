@@ -117,7 +117,7 @@
         <div class="form-group">
           <label class="col-sm-2 control-label">Security Code</label>
           <div class="col-sm-10">
-            <input class="form-control" ng-model="ctrl.payment.code" placeholder="123" />
+            <input class="form-control" ng-model="ctrl.payment.cvc" placeholder="123" />
           </div>
         </div>
 
@@ -168,8 +168,13 @@
 
 
       <button
+        ng-hide="ctrl.authorizing"
         ng-click="ctrl.authorizePayment()"
         class="btn btn-success pull-right"><span class=""></span>Submit Transaction for ${{ ctrl.total(ctrl.cart) }}</button>
+      <button
+        ng-show="ctrl.authorizing"
+        ng-click="ctrl.authorizePayment()"
+        class="btn btn-success pull-right"><span class=""></span>In Progress...</button>
 
       <button
         style="margin-right: 1em;"
@@ -236,10 +241,40 @@
     </div>
 </div>
 
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script type="text/javascript" src="/js/services.js"></script>
 <script type="text/javascript">
   angular.module('orderApp', ['services'])
-  .controller('orderCtrl', function($http, $timeout, recipes) {
+  .factory('submit_charge', function($http) {
+    return function(params) {
+      return $http.post('/charge', { stripeToken: params.token, cart: params.cart, browser_total_cost: params.browser_total_cost }).then(function(response) {
+        console.log('/charge', response);
+      });
+    };
+  })
+
+  .factory('stripe_charge', function($q) {
+    return function(number, month, year, cvc) {
+      var deferred = $q.defer();
+
+      Stripe.setPublishableKey('<%= publishable_key %>');
+      Stripe.card.createToken({
+        number: number,
+        cvc: cvc,
+        exp_month: month,
+        exp_year: year
+      }, function(status, response) {
+        if (response.error) {
+          deferred.reject(response.error.message);
+        } else {
+          deferred.resolve(response);
+        }
+      });
+
+      return deferred.promise;
+    };
+  })
+  .controller('orderCtrl', function($http, $timeout, recipes, stripe_charge, submit_charge) {
     var ctrl = this;
 
     ctrl.isMeal = function(desired_meal) {
@@ -287,6 +322,25 @@
     recipes.get().then(function(all_recipes) {
       ctrl.recipes = all_recipes;
     });
+
+    ctrl.authorizePayment = function() {
+      ctrl.authorizing = true;
+      stripe_charge(ctrl.payment.number, ctrl.payment.month || 7, ctrl.payment.year || 17, ctrl.payment.cvc).then(function(response) {
+        submit_charge({
+          token: response.id,
+          cart: ctrl.cart,
+          browser_total_cost: ctrl.total(ctrl.cart)
+        }).then(function(result) {
+          ctrl.authorizing = false;
+          //ctrl.order_step = 'receipt';
+        }, function() {
+          ctrl.authorizing = false;
+        });
+      }, function(error) {
+        ctrl.authorizing = false;
+        alert("Your payment method was rejected.\n" + error);
+      });
+    };
   })
 
   angular.bootstrap(angular.element(document.getElementById('orderApp')), ['orderApp'])

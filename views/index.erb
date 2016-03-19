@@ -97,7 +97,7 @@
     </section>
 
     <section id="order">
-        <%= erb :order %>
+        <%= erb :order, locals: { publishable_key: publishable_key } %>
     </section>
 
     <section id="our-mission">
